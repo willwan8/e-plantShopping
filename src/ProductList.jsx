@@ -1,4 +1,5 @@
 import React, { useState,useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import './ProductList.css'
 import CartItem from './CartItem';
 import { addItem, removeItem, updateQuantity} from './CartSlice';
@@ -251,12 +252,12 @@ const handlePlantsClick = (e) => {
   };
 
   const handleAddToCart = (product) => {
-    dispatchEvent(addItem(product));
+    dispatch(addItem(product));
     setAddedToCart((prevState) => ({
-        ...prevState,
-        [product.name]: true
-    }));
-  }
+       ...prevState,
+       [product.name]: true, // Set the product name as key and value as true to indicate it's added to cart
+     }));
+  };
     return (
         <div>
              <div className="navbar" style={styleObj}>

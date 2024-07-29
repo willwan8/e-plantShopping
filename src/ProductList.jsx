@@ -7,12 +7,22 @@ import { addItem, removeItem, updateQuantity} from './CartSlice';
 function ProductList() {
     const [showCart, setShowCart] = useState(false); 
     const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
-    const [addedToCart, setAddedToCart] = useState({});
+    const [addedToCart, setAddedToCart] = useState({}); 
     const dispatch = useDispatch();
 
     const cartItems = useSelector((state) => state.cart.items);
 
     const totalPlants = cartItems.reduce((total, item) => total + item.quantity, 0)
+
+    //updating DOM after item is added/deleted in cart
+    useEffect(() => {
+       const updatedCart = {};
+       cartItems.forEach((item) => {
+        updatedCart[item.name] = true;
+       });
+       setAddedToCart(updatedCart);
+    }, [cartItems]);
+
     const plantsArray = [
         {
             category: "Air Purifying Plants",
@@ -311,9 +321,11 @@ const handlePlantsClick = (e) => {
                                 <div className="product-cost">{plant.cost}</div>
                                 {/*Similarly like the above plant.name show other details like description and cost*/}
                                 <button 
-                                className={`product-button ${plant.added ? '.added-to-cart' : ''}`} onClick={() => handleAddToCart(plant)}
-                                disabled={plant.added}>
-                                    {plant.added ? 'Added to Cart' : 'Add to Cart'}
+                                className={`product-button ${addedToCart[plant.name] ? 'added-to-cart' : ''}`} 
+                                onClick={() => handleAddToCart(plant)}
+                                disabled={addedToCart[plant.name]}
+                                >
+                                    {addedToCart[plant.name] ? 'Added to Cart' : 'Add to Cart'}
                                 </button>
                             </div>
                             ))}
